@@ -16,7 +16,6 @@ class Usuario(models.Model):
     funcao = models.CharField(max_length=100)
     unidade = models.ForeignKey(Unidade, on_delete=models.CASCADE)
 
-
 class Paciente(models.Model):
     # Dados imutáveis e de referência
     cpf = models.CharField(max_length=14, unique=True)
