@@ -82,6 +82,27 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=127.0.0.1
 POSTGRES_PORT=5432
 ```
+
+### Como se conectar ao PostgreSQL
+
+1. Certifique-se de que o serviço PostgreSQL esteja em execução na máquina local.
+2. Crie o banco informado em `POSTGRES_DB` e confirme que o usuário possui permissão de acesso.
+3. Verifique se `POSTGRES_HOST` e `POSTGRES_PORT` correspondem ao ambiente em que o banco está rodando.
+4. Teste a conexão com as credenciais definidas no `.env` antes de iniciar o backend.
+5. Após validar o acesso, execute as migrações e inicie a aplicação.
+
+Conexão local padrão:
+
+- host: `localhost`
+- porta: `5432`
+- banco: `sinan_web`
+- usuário: `admin_sinanweb`
+- senha: `2026sinan`
+````sql
+CREATE USER admin_sinanweb WITH PASSWORD '2026sinan';
+CREATE DATABASE sinan_web OWNER admin_sinanweb;
+GRANT ALL PRIVILEGES ON DATABASE sinan_web TO admin_sinanweb;
+````
 ### Executando
 1. **Aplique as migrações:**
    ```powershell
