@@ -1,5 +1,7 @@
-from django.http import JsonResponse
 
+from rest_framework import viewsets, permissions
+from .models import *
+from .serializers import *
+from django.shortcuts import get_object_or_404
 
-def healthcheck(request):
-	return JsonResponse({'status': 'ok'})
+# ViewSets para processar as requisições
