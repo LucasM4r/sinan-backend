@@ -1,0 +1,146 @@
+components:
+  parameters:
+    # --- PAGINATION PARAMETERS ---
+    PageParam:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+      example: 1
+    PageSizeParam:
+      name: page_size
+      in: query
+      required: false
+      schema:
+        type: integer
+      example: 10
+    # --- DATE RANGE PARAMETERS ---
+    StartDateParam:
+      name: start_date
+      in: query
+      required: false
+      description: Data inicial para filtrar (formato YYYY-MM-DD).
+      schema:
+        type: string
+        format: date
+      example: "2024-01-01"
+    EndDateParam:
+      name: end_date
+      in: query
+      required: false
+      description: Data final para filtrar (formato YYYY-MM-DD).
+      schema:
+        type: string
+        format: date
+      example: "2024-12-31"
+    # --- SEARCH PARAMETERS ---
+    SearchParam:
+      name: search
+      in: query
+      required: false
+      description: Busca por nome do paciente, CPF ou termos específicos da notificação.
+      schema:
+        type: string
+      example: "Joao"
+    # --- ID FILTER PARAMETERS ---
+    DiseaseIDParam:
+      name: disease_id
+      in: query
+      required: false
+      description: Filtra por ID da doença.
+      schema:
+        type: integer
+      example: 5
+    PatientIDParam:
+      name: patient_id
+      in: query
+      required: false
+      description: Filtra por ID do paciente.
+      schema:
+        type: integer
+      example: 42
+    UnitIDParam:
+      name: unit_id
+      in: query
+      required: false
+      description: Filtra por ID da unidade de saúde.
+      schema:
+        type: integer
+      example: 12
+  schemas:
+    # --- ERROR RESPONSE SCHEMA ---
+    ErrorResponse:
+      type: object
+      required:
+        - type
+        - detail
+      properties:
+        type:
+          type: string
+          description: Código padronizado do erro para o frontend tratar programaticamente.
+          example: "invalid_request"
+        detail:
+          type: string
+          description: Mensagem legível por humanos explicando o que aconteceu.
+          example: "Um ou mais parâmetros da requisição são inválidos."
+        invalid_params:
+          type: array
+          description: Lista com os campos específicos que geraram o erro (opcional).
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Nome do campo ou parâmetro com erro.
+                example: "start_date"
+              reason:
+                type: string
+                description: O motivo da falha naquele campo.
+                example: "O formato de data deve ser YYYY-MM-DD."
+
+    # --- PATIENT SCHEMA ---
+    PatientResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único do paciente gerado pelo banco de dados.
+          example: 105
+        name:
+          type: string
+          description: Nome completo do paciente.
+          example: "João da Silva"
+        cpf:
+          type: string
+          description: CPF do paciente (apenas números).
+          example: "12345678900"
+
+    PatientCreateRequest:
+      type: object
+      required:
+        - name
+        - cpf
+      properties:
+        name:
+          type: string
+          description: Nome completo do paciente para cadastro.
+          example: "Maria Oliveira"
+        cpf:
+          type: string
+          description: CPF válido (apenas números).
+          example: "09876543211"
+
+    PatientUpdateRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Nome completo do paciente para atualização.
+          example: "João da Silva Souza"
+        cpf:
+          type: string
+          description: CPF do paciente (caso seja permitida a alteração ou validação).
+          example: "12345678900"

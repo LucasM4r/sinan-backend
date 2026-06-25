@@ -3,3 +3,4 @@ python-dotenv==1.1.1
 psycopg[binary]
 djangorestframework
 django-cors-headers
+drf-spectacular

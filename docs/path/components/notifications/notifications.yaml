@@ -1,0 +1,54 @@
+# --- NOTIFICATION RESPONSE ---
+components:
+  schemas:
+    NotificationResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: ID único da notificação base.
+            example: 1042
+          patient_id:
+            type: integer
+            description: ID do paciente.
+            example: 55
+          unit_id:
+            type: integer
+            description: ID da unidade de saúde.
+            example: 12
+          notification_type_slug:
+            type: string
+            description: Identificador do agravo.
+            example: "dengue"
+          occurrence_date:
+            type: string
+            format: date
+            description: Data da ocorrência.
+            example: "2026-06-20"
+          status:
+            type: string
+            description: Status atual da notificação.
+            example: "confirmado"
+
+    # O novo schema que o GET real vai usar
+    PaginatedNotificationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total geral de notificações no banco.
+          example: 1530
+        next:
+          type: string
+          nullable: true
+          description: URL para a próxima página.
+          example: "http://localhost:8000/api/v1/notificacoes/?page=2"
+        previous:
+          type: string
+          nullable: true
+          description: URL para a página anterior.
+          example: null
+        results:
+          $ref: "#/components/schemas/NotificationResponse"

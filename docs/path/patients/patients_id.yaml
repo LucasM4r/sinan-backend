@@ -1,0 +1,82 @@
+# --- SHARED PARAMETERS ---
+parameters:
+  - name: id
+    in: path
+    required: true
+    description: ID único do paciente.
+    schema:
+      type: integer
+      example: 105
+
+# --- GET METHOD ---
+get:
+  summary: Buscar detalhes do paciente
+  description: Retorna os dados de um paciente específico pelo seu ID.
+  operationId: detalharPaciente
+  tags:
+    - Pacientes
+  security: []
+  responses:
+    "200":
+      description: Dados do paciente recuperados com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/components/schemas/PatientResponse"
+    "404":
+      description: Paciente não encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+
+# --- PUT METHOD ---
+put:
+  description: Altera os dados cadastrais de um paciente existente.
+  operationId: atualizarPaciente
+  tags:
+    - Pacientes
+  security: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../components/schemas.yaml#/components/schemas/PatientUpdateRequest"
+  responses:
+    "200":
+      description: Paciente atualizado com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/components/schemas/PatientResponse"
+    "400":
+      description: Erro de validação nos dados enviados.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+    "404":
+      description: Paciente não encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+
+# --- DELETE METHOD ---
+delete:
+  summary: Excluir paciente
+  description: Remove um paciente do sistema.
+  operationId: deletarPaciente
+  tags:
+    - Pacientes
+  security: []
+  responses:
+    "204":
+      description: Paciente excluído com sucesso (Sem conteúdo de retorno).
+    "404":
+      description: Paciente não encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
