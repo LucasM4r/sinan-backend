@@ -12,8 +12,8 @@ Módulo de Serialização (API Integration)
     :type model: Django Model
 '''
 
-import serializers
-from models import *
+from rest_framework import serializers
+from .models import *
 
 class UnidadeSerializer(serializers.ModelSerializer): # Serializa modelo de Unidades
     class Meta:

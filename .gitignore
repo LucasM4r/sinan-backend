@@ -1,0 +1,10 @@
+
+# --- ENVIRONMENT ---
+.env
+.DS_Store
+.idea/
+.vscode/
+
+# --- PYTHON ---
+__pycache__/
+*.pyc
