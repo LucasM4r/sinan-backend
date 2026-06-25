@@ -1,0 +1,33 @@
+get:
+  summary: Listar notificações no sistema SINAN.
+  description: >
+    Retorna uma lista com todas as notificações cadastradas no sistema, 
+    contendo apenas os dados gerais (comuns a todos os agravos).
+  tags:
+    - Notificações (Geral)
+  operationId: listarNotificacoes
+  security: []
+  parameters:
+    - $ref: ../components/schemas.yaml#/components/parameters/PageParam
+    - $ref: ../components/schemas.yaml#/components/parameters/PageSizeParam
+    - $ref: ../components/schemas.yaml#/components/parameters/SearchParam
+    - $ref: ../components/schemas.yaml#/components/parameters/StartDateParam
+    - $ref: ../components/schemas.yaml#/components/parameters/EndDateParam
+    - $ref: ../components/schemas.yaml#/components/parameters/DiseaseIDParam
+    - $ref: ../components/schemas.yaml#/components/parameters/PatientIDParam
+    - $ref: ../components/schemas.yaml#/components/parameters/UnitIDParam
+  responses:
+    "200":
+      description: Lista de notificações retornada com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/notifications/notifications.yaml#/components/schemas/PaginatedNotificationList
+    "400":
+      description: Requisição inválida. Os parâmetros de filtro informados possuem erros de validação.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas.yaml#/components/schemas/ErrorResponse
+    "401":
+      description: Acesso não autorizado. O token de acesso é inválido ou expirou.

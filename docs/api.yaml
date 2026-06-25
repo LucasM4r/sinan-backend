@@ -1,0 +1,47 @@
+openapi: 3.0.0
+info:
+  title: SINAN API - Sistema de Informação de Agravos de Notificação API
+  version: 1.0.0
+  description: API para integração com o Sistema de Informação de Agravos de Notificação (SINAN).
+  license:
+    name: "Uso Restrito - Ministério da Saúde"
+    url: "https://www.gov.br/saude/pt-br"
+
+servers:
+  - url: "{environment}"
+    description: Escolha o ambiente da API SINAN
+    variables:
+      environment:
+        default: https://api.sinan.gov.br
+        enum:
+          - https://api.sinan.gov.br
+          - http://localhost:8000
+        description: Ambientes disponíveis para integração
+paths:
+  # --- AUTHENTICATION ENDPOINTS ---
+  /api/v1/auth/login:
+    $ref: path/auth.yaml
+
+  # --- UNITS ENDPOINTS ---
+  /api/v1/units:
+    $ref: path/units/units.yaml
+  /api/v1/units/{id}:
+    $ref: path/units/units_id.yaml
+
+  # --- PATIENTS ENDPOINTS ---
+  /api/v1/patients:
+    $ref: path/patients/patients.yaml
+  /api/v1/patients/{id}:
+    $ref: path/patients/patients_id.yaml
+
+  # --- NOTIFICATIONS ENDPOINTS ---
+  /api/v1/notifications:
+    $ref: path/notifications/notifications.yaml
+
+  # --- DENGUE NOTIFICATIONS ENDPOINTS ---
+  /api/v1/notifications/dengue:
+    $ref: path/notifications/dengue/dengue.yaml
+  /api/v1/notifications/dengue/{id}:
+    $ref: path/notifications/dengue/dengue_id.yaml
+
+  # --- BOTULISM NOTIFICATIONS ENDPOINTS ---

@@ -1,0 +1,48 @@
+# ENDPOINT: /units
+
+# --- GET METHOD ---
+get:
+  summary: Listar unidades de saúde
+  description: Retorna uma lista com todas as unidades cadastradas no sistema.
+  operationId: listarUnidades
+  tags:
+    - Unidades
+  security: []
+  responses:
+    "200":
+      description: Lista de unidades recuperada com sucesso.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id: { type: integer, example: 12 }
+                name: { type: string, example: "UPA 24h - Centro" }
+    "404":
+      description: Nenhuma unidade encontrada.
+
+# --- POST METHOD ---
+post:
+  summary: Cadastrar nova unidade
+  description: Cria uma nova unidade de saúde no banco de dados.
+  operationId: criarUnidade
+  tags:
+    - Unidades
+  security: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name: { type: string, example: "Posto de Saúde Vila Nova" }
+  responses:
+    "201":
+      description: Unidade criada com sucesso.
+    "400":
+      description: Erro de validação nos dados enviados.

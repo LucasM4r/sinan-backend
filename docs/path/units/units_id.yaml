@@ -1,0 +1,72 @@
+# ENDPOINT: /units/{id}
+
+# --- SHARED PARAMETERS ---
+parameters:
+  - name: id
+    in: path
+    required: true
+    description: ID único da unidade de saúde.
+    schema:
+      type: integer
+      example: 12
+
+# --- GET METHOD ---
+get:
+  summary: Buscar detalhes da unidade
+  description: Retorna os dados de uma unidade de saúde específica pelo seu ID.
+  operationId: detalharUnidade
+  tags:
+    - Unidades
+  security: []
+  responses:
+    "200":
+      description: Unidade recuperada com sucesso.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id: { type: integer, example: 12 }
+              name: { type: string, example: "UPA 24h - Centro" }
+    "404":
+      description: Unidade não encontrada.
+
+# --- PUT METHOD ---
+put:
+  summary: Atualizar unidade
+  description: Altera o nome de uma unidade de saúde existente.
+  operationId: atualizarUnidade
+  tags:
+    - Unidades
+  security: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name: { type: string, example: "UPA 24h - Zona Norte" }
+  responses:
+    "200":
+      description: Unidade atualizada com sucesso.
+    "400":
+      description: Erro de validação nos dados enviados.
+    "404":
+      description: Unidade não encontrada.
+
+# --- DELETE METHOD ---
+delete:
+  summary: Excluir unidade
+  description: Remove uma unidade de saúde do sistema.
+  operationId: deletarUnidade
+  tags:
+    - Unidades
+  security: []
+  responses:
+    "204":
+      description: Unidade excluída com sucesso (Sem conteúdo de retorno).
+    "404":
+      description: Unidade não encontrada.

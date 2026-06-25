@@ -1,0 +1,41 @@
+post:
+  summary: Autenticação de usuários no sistema SINAN.
+  description: >
+    Endpoint para autenticação de usuários no sistema SINAN. Recebe credenciais de
+    login e retorna um token de acesso válido para uso em chamadas subsequentes à API.
+  tags:
+    - Autenticação
+  operationId: loginUsuario
+  security: []
+  requestBody:
+    description: Credenciais de login do usuário.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              example: "admin@sinan.gov.br"
+              description: Endereço de e-mail do usuário.
+            password:
+              type: string
+              format: password
+              example: "2026sinan"
+              description: Senha do usuário.
+  responses:
+    "200":
+      description: Autenticação bem-sucedida. Retorna um token de acesso.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                description: Token de acesso JWT.
+                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "401":
+      description: Credenciais inválidas. O usuário não pôde ser autenticado.
