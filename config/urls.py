@@ -23,9 +23,14 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('app.urls')),          # url das rotas da API
+
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # Endpoints para Documentação Automática da API (Swagger / OpenAPI 3)
     path('api/docs/', SpectacularSwaggerView.as_view(url='/static/api.yaml'), name='swagger-ui'),
-    path('', include('app.urls')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 if settings.DEBUG:
