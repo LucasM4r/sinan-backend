@@ -1,0 +1,17 @@
+post:
+  summary: Logout do usuário.
+  description: Invalida o token do usuário autenticado no cabeçalho Authorization.
+  tags:
+    - Autenticação
+  operationId: logoutUsuario
+
+  responses:
+    # --- SUCCESS WITHOUT CONTENT RESPONSE ---
+    "204":
+      description: Logout realizado com sucesso (sem conteúdo).
+    # --- UNAUTHORIZED ERROR RESPONSE ---
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"

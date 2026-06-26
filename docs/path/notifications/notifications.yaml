@@ -1,3 +1,6 @@
+# ENDPOINT: /notifications
+
+# --- GET METHOD ---
 get:
   summary: Listar notificações no sistema SINAN.
   description: >
@@ -6,28 +9,29 @@ get:
   tags:
     - Notificações (Geral)
   operationId: listarNotificacoes
-  security: []
   parameters:
-    - $ref: ../components/schemas.yaml#/components/parameters/PageParam
-    - $ref: ../components/schemas.yaml#/components/parameters/PageSizeParam
-    - $ref: ../components/schemas.yaml#/components/parameters/SearchParam
-    - $ref: ../components/schemas.yaml#/components/parameters/StartDateParam
-    - $ref: ../components/schemas.yaml#/components/parameters/EndDateParam
-    - $ref: ../components/schemas.yaml#/components/parameters/DiseaseIDParam
-    - $ref: ../components/schemas.yaml#/components/parameters/PatientIDParam
-    - $ref: ../components/schemas.yaml#/components/parameters/UnitIDParam
+    - $ref: "../components/parameters.yaml#/PageParam"
+    - $ref: "../components/parameters.yaml#/PageSizeParam"
+    - $ref: "../components/parameters.yaml#/SearchParam"
+    - $ref: "../components/parameters.yaml#/StartDateParam"
+    - $ref: "../components/parameters.yaml#/EndDateParam"
+    - $ref: "../components/parameters.yaml#/DiseaseIDParam"
+    - $ref: "../components/parameters.yaml#/PatientIDParam"
+    - $ref: "../components/parameters.yaml#/UnitIDParam"
   responses:
+    # --- SUCCESS RESPONSE ---
     "200":
-      description: Lista de notificações retornada com sucesso.
+      description: Lista de notificações retornada com sucesso (pode ser vazia).
       content:
         application/json:
           schema:
-            $ref: ../components/notifications/notifications.yaml#/components/schemas/PaginatedNotificationList
+            $ref: "../components/schemas.yaml#/PaginatedNotificationList"
+    # --- BAD REQUEST RESPONSE ---
     "400":
-      description: Requisição inválida. Os parâmetros de filtro informados possuem erros de validação.
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas.yaml#/components/schemas/ErrorResponse
+      $ref: "../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED ACCESS RESPONSE ---
     "401":
-      description: Acesso não autorizado. O token de acesso é inválido ou expirou.
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- INTERNAL SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
