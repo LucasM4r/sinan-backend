@@ -1,4 +1,6 @@
 openapi: 3.0.0
+security:
+  - bearerAuth: []
 info:
   title: SINAN API - Sistema de Informação de Agravos de Notificação API
   version: 1.0.0
@@ -20,7 +22,9 @@ servers:
 paths:
   # --- AUTHENTICATION ENDPOINTS ---
   /api/v1/auth/login:
-    $ref: path/auth.yaml
+    $ref: path/auth/login.yaml
+  /api/v1/auth/logout:
+    $ref: path/auth/logout.yaml
 
   # --- UNITS ENDPOINTS ---
   /api/v1/units:
@@ -44,4 +48,9 @@ paths:
   /api/v1/notifications/dengue/{id}:
     $ref: path/notifications/dengue/dengue_id.yaml
 
-  # --- BOTULISM NOTIFICATIONS ENDPOINTS ---
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

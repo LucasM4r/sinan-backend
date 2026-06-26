@@ -1,0 +1,68 @@
+# --- PAGINATION PARAMETERS ---
+PageParam:
+  name: page
+  in: query
+  required: false
+  schema:
+    type: integer
+  example: 1
+PageSizeParam:
+  name: page_size
+  in: query
+  required: false
+  schema:
+    type: integer
+  example: 10
+# --- DATE RANGE PARAMETERS ---
+StartDateParam:
+  name: start_date
+  in: query
+  required: false
+  description: Data inicial para filtrar (formato YYYY-MM-DD).
+  schema:
+    type: string
+    format: date
+  example: "2024-01-01"
+EndDateParam:
+  name: end_date
+  in: query
+  required: false
+  description: Data final para filtrar (formato YYYY-MM-DD).
+  schema:
+    type: string
+    format: date
+  example: "2024-12-31"
+# --- SEARCH PARAMETERS ---
+SearchParam:
+  name: search
+  in: query
+  required: false
+  description: Busca por nome do paciente, CPF ou termos específicos da notificação.
+  schema:
+    type: string
+  example: "Joao"
+# --- ID FILTER PARAMETERS ---
+DiseaseIDParam:
+  name: disease_id
+  in: query
+  required: false
+  description: Filtra por ID da doença.
+  schema:
+    type: integer
+  example: 5
+PatientIDParam:
+  name: patient_id
+  in: query
+  required: false
+  description: Filtra por ID do paciente.
+  schema:
+    type: integer
+  example: 42
+UnitIDParam:
+  name: unit_id
+  in: query
+  required: false
+  description: Filtra por ID da unidade de saúde.
+  schema:
+    type: integer
+  example: 12

@@ -1,0 +1,104 @@
+# --- BASE ---
+BaseError:
+  type: object
+  required: [type, detail]
+  properties:
+    type: { type: string, description: "Código do erro" }
+    detail: { type: string, description: "Mensagem descritiva" }
+
+  # --- 400s ---
+BadRequestError: # 400
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        invalid_params:
+          {
+            type: array,
+            items:
+              {
+                type: object,
+                properties:
+                  { name: { type: string }, reason: { type: string } },
+              },
+          }
+
+UnauthorizedError: # 401
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        code:
+          { type: string, description: "Ex: 'token_expired', 'missing_token'" }
+
+PaymentRequiredError: # 402
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        payment_url:
+          {
+            type: string,
+            description: "URL para efetuar o pagamento necessário.",
+          }
+
+ForbiddenError: # 403
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        required_role:
+          {
+            type: string,
+            description: "O nível de acesso necessário que falta.",
+          }
+
+NotFoundError: # 404
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        resource: { type: string, description: "Ex: 'patient', 'unit'" }
+        id: { type: string }
+
+UnprocessableEntityError: # 422
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        errors:
+          { type: object, description: "Erros de validação lógica de negócio." }
+
+  # --- 500s ---
+InternalServerError: # 500
+  allOf:
+    - $ref: "#/BaseError"
+    - type: object
+      properties:
+        request_id:
+          { type: string, description: "ID de rastro para o suporte." }
+
+responses:
+  "400":
+    description: "Bad Request - Erro na sintaxe da requisição."
+    content: { application/json: { schema: { $ref: "#/BadRequestError" } } }
+  "401":
+    description: "Unauthorized - Credenciais inválidas ou ausentes."
+    content: { application/json: { schema: { $ref: "#/UnauthorizedError" } } }
+  "402":
+    description: "Payment Required - Pagamento necessário para acessar o recurso."
+    content:
+      { application/json: { schema: { $ref: "#/PaymentRequiredError" } } }
+  "403":
+    description: "Forbidden - Acesso negado."
+    content: { application/json: { schema: { $ref: "#/ForbiddenError" } } }
+  "404":
+    description: "Not Found - O recurso não existe."
+    content: { application/json: { schema: { $ref: "#/NotFoundError" } } }
+  "422":
+    description: "Unprocessable Entity - Erro de regra de negócio."
+    content:
+      { application/json: { schema: { $ref: "#/UnprocessableEntityError" } } }
+  "500":
+    description: "Internal Server Error - Erro interno do servidor."
+    content: { application/json: { schema: { $ref: "#/InternalServerError" } } }

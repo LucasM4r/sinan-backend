@@ -15,53 +15,48 @@ get:
   operationId: detalharPaciente
   tags:
     - Pacientes
-  security: []
   responses:
     "200":
       description: Dados do paciente recuperados com sucesso.
       content:
         application/json:
           schema:
-            $ref: "../components/schemas.yaml#/components/schemas/PatientResponse"
+            $ref: "../components/schemas.yaml#/PatientResponse"
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
     "404":
-      description: Paciente não encontrado.
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+      $ref: "../components/errors.yaml#/responses/404"
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
 
 # --- PUT METHOD ---
 put:
+  summary: Alterar dados do paciente
   description: Altera os dados cadastrais de um paciente existente.
   operationId: atualizarPaciente
   tags:
     - Pacientes
-  security: []
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: "../components/schemas.yaml#/components/schemas/PatientUpdateRequest"
+          $ref: "../components/schemas.yaml#/PatientUpdateRequest"
   responses:
     "200":
       description: Paciente atualizado com sucesso.
       content:
         application/json:
           schema:
-            $ref: "../components/schemas.yaml#/components/schemas/PatientResponse"
+            $ref: "../components/schemas.yaml#/PatientResponse"
     "400":
-      description: Erro de validação nos dados enviados.
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+      $ref: "../components/errors.yaml#/responses/400"
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
     "404":
-      description: Paciente não encontrado.
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+      $ref: "../components/errors.yaml#/responses/404"
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
 
 # --- DELETE METHOD ---
 delete:
@@ -70,13 +65,12 @@ delete:
   operationId: deletarPaciente
   tags:
     - Pacientes
-  security: []
   responses:
     "204":
       description: Paciente excluído com sucesso (Sem conteúdo de retorno).
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
     "404":
-      description: Paciente não encontrado.
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+      $ref: "../components/errors.yaml#/responses/404"
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"

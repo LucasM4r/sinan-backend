@@ -1,85 +1,33 @@
+# ENDPOINT: /notifications/dengue
+
+# --- POST METHOD ---
 post:
   summary: Criar notificação de Dengue/Chikungunya
   description: Registra uma nova notificação no sistema unindo os dados gerais de triagem com os dados clínicos específicos de Dengue e Chikungunya.
   operationId: criarNotificacaoDengue
   tags:
     - Notificações (Agravos Específicos)
-  security: []
-
   requestBody:
     description: Payload contendo os dados gerais e específicos do agravo.
     required: true
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - patient_id
-            - unit_id
-            - user_id
-            - notification_date
-            - occurrence_date
-          properties:
-            # --- CAMPOS DA TABELA PAI (notifications) ---
-            patient_id:
-              type: integer
-              description: ID do paciente.
-              example: 105
-            unit_id:
-              type: integer
-              description: ID da unidade de saúde responsável.
-              example: 12
-            user_id:
-              type: integer
-              description: ID do profissional de saúde que está registrando.
-              example: 3
-            status:
-              type: string
-              description: "Status da notificação (ex: suspeito, confirmado, descartado)."
-              example: "suspeito"
-            notification_date:
-              type: string
-              format: date
-              description: Data em que a notificação foi preenchida.
-              example: "2026-06-25"
-            occurrence_date:
-              type: string
-              format: date
-              description: Data dos primeiros sintomas ou da ocorrência do agravo.
-              example: "2026-06-20"
-            notes:
-              type: string
-              description: Observações gerais do caso.
-              example: "Paciente chegou à triagem relatando fortes dores articulares e febre alta há 5 dias."
-            st_fever:
-              type: string
-              description: Presença de febre.
-              example: "sim"
-            st_arthralgia_intense:
-              type: string
-              description: Dor articular intensa (característico de Chikungunya).
-              example: "sim"
-            st_result_chik_s1:
-              type: string
-              description: Resultado da sorologia para Chikungunya.
-              example: "nao_realizado"
-            st_result_ns1:
-              type: string
-              description: Resultado do antígeno NS1 para Dengue.
-              example: "reagente"
-            tp_classification:
-              type: string
-              description: Classificação final do caso.
-              example: "dengue_com_sinais_de_alarme"
-            st_shock:
-              type: string
-              description: Presença de choque.
-              example: "nao"
-
+          $ref: "../../components/schemas.yaml#/DengueCreateRequest"
   responses:
+    # --- CREATED RESPONSE ---
     "201":
       description: Notificação criada com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas.yaml#/DengueNotificationResponse"
+    # --- BAD REQUEST RESPONSE ---
     "400":
-      description: Erro de validação. Campos obrigatórios ausentes ou com formatação incorreta.
+      $ref: "../../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED RESPONSE ---
     "401":
-      description: Não autorizado. Token ausente ou inválido.
+      $ref: "../../components/errors.yaml#/responses/401"
+    # --- SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../../components/errors.yaml#/responses/500"

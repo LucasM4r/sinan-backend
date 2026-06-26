@@ -17,56 +17,62 @@ get:
   operationId: detalharUnidade
   tags:
     - Unidades
-  security: []
   responses:
     "200":
       description: Unidade recuperada com sucesso.
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              id: { type: integer, example: 12 }
-              name: { type: string, example: "UPA 24h - Centro" }
+            $ref: "../components/schemas.yaml#/UnitResponse"
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
     "404":
-      description: Unidade não encontrada.
+      $ref: "../components/errors.yaml#/responses/404"
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
 
 # --- PUT METHOD ---
 put:
   summary: Atualizar unidade
-  description: Altera o nome de uma unidade de saúde existente.
+  description: Altera os dados de uma unidade de saúde existente.
   operationId: atualizarUnidade
   tags:
     - Unidades
-  security: []
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - name
-          properties:
-            name: { type: string, example: "UPA 24h - Zona Norte" }
+          $ref: "../components/schemas.yaml#/UnitCreateRequest"
   responses:
     "200":
-      description: Unidade atualizada com sucesso.
+      description: Unidade atualizada com sucesso. Retorna os novos dados.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/UnitResponse"
     "400":
-      description: Erro de validação nos dados enviados.
+      $ref: "../components/errors.yaml#/responses/400"
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
     "404":
-      description: Unidade não encontrada.
+      $ref: "../components/errors.yaml#/responses/404"
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
 
 # --- DELETE METHOD ---
 delete:
   summary: Excluir unidade
-  description: Remove uma unidade de saúde do sistema.
+  description: Remove uma unidade de saúde do sistema (exclusão lógica recomendada).
   operationId: deletarUnidade
   tags:
     - Unidades
-  security: []
   responses:
     "204":
       description: Unidade excluída com sucesso (Sem conteúdo de retorno).
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
     "404":
-      description: Unidade não encontrada.
+      $ref: "../components/errors.yaml#/responses/404"
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
