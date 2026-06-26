@@ -11,6 +11,8 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - sinan_pg_data:/var/lib/postgresql/data
+    networks:
+      - sinan_net
   pgadmin:
     image: dpage/pgadmin4:7.7
     container_name: sinan-pgadmin
@@ -22,6 +24,8 @@ services:
       - "${PGADMIN_PORT}:80"
     depends_on:
       - db
+    networks:
+      - sinan_net
   backend:
     container_name: sinan-backend
     build: 
@@ -41,5 +45,11 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
     depends_on:
       - db
+    networks:
+      - sinan_net
 volumes:
   sinan_pg_data:
+
+networks:
+  sinan_net:
+    driver: bridge
