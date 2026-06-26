@@ -41,12 +41,8 @@ paths:
   # --- NOTIFICATIONS ENDPOINTS ---
   /api/v1/notifications:
     $ref: path/notifications/notifications.yaml
-
-  # --- DENGUE NOTIFICATIONS ENDPOINTS ---
-  /api/v1/notifications/dengue:
-    $ref: path/notifications/dengue/dengue.yaml
-  /api/v1/notifications/dengue/{id}:
-    $ref: path/notifications/dengue/dengue_id.yaml
+  /api/v1/notifications/{id}:
+    $ref: path/notifications/notifications_id.yaml
 
 components:
   securitySchemes:

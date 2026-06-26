@@ -1,0 +1,101 @@
+# ENDPOINT: /notifications/{id}
+
+parameters:
+  - name: id
+    in: path
+    description: ID da notificação a ser consultada.
+    required: true
+    schema:
+      type: integer
+      example: 12345
+
+# --- GET METHOD ---
+get:
+  summary: Consultar notificação por ID (Polimórfico)
+  description: >
+    Retorna os dados completos de uma notificação específica, incluindo 
+    informações detalhadas do paciente, unidade de saúde e agravo.
+  tags:
+    - Notificações (Geral)
+  operationId: consultarNotificacaoPorID
+  responses:
+    # --- SUCCESS RESPONSE ---
+    "200":
+      description: Notificação retornada com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/PolymorphicNotificationResponse"
+    # --- NOT FOUND RESPONSE ---
+    "404":
+      $ref: "../components/errors.yaml#/responses/404"
+    # --- BAD REQUEST RESPONSE ---
+    "400":
+      $ref: "../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED ACCESS RESPONSE ---
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- INTERNAL SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
+
+put:
+  summary: Atualizar notificação por ID (Polimórfico)
+  description: >
+    Atualiza os dados de uma notificação específica, permitindo a modificação 
+    de informações detalhadas do paciente, unidade de saúde e agravo.
+  tags:
+    - Notificações (Geral)
+  operationId: atualizarNotificacaoPorID
+  requestBody:
+    description: Dados da notificação a serem atualizados.
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../components/schemas.yaml#/CreateNotificationRequest"
+  responses:
+    # --- SUCCESS RESPONSE ---
+    "200":
+      description: Notificação atualizada com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/PolymorphicNotificationResponse"
+    # --- NOT FOUND RESPONSE ---
+    "404":
+      $ref: "../components/errors.yaml#/responses/404"
+    # --- BAD REQUEST RESPONSE ---
+    "400":
+      $ref: "../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED ACCESS RESPONSE ---
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- INTERNAL SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
+
+# --- DELETE METHOD ---
+delete:
+  summary: Excluir notificação por ID (Polimórfico)
+  description: >
+    Remove uma notificação específica do sistema.
+  tags:
+    - Notificações (Geral)
+  operationId: excluirNotificacaoPorID
+  responses:
+    # --- SUCCESS WITH NO CONTENT RESPONSE ---
+    "204":
+      description: Notificação excluída com sucesso. Nenhum conteúdo retornado.
+    # --- BAD REQUEST RESPONSE ---
+    "400":
+      $ref: "../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED ACCESS RESPONSE ---
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- NOT FOUND RESPONSE ---
+    "404":
+      $ref: "../components/errors.yaml#/responses/404"
+    # --- INTERNAL SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"

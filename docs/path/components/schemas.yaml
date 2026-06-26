@@ -162,6 +162,7 @@ NotificationBase:
     - unit_id
     - notification_date
     - occurrence_date
+    - notification_type_slug
   properties:
     patient_id:
       type: integer
@@ -189,6 +190,24 @@ NotificationBase:
       type: string
       description: Observações adicionais sobre a notificação.
       example: "Paciente internado."
+
+CreateNotificationRequest:
+  description: Requisição para criar uma nova notificação.
+  oneOf:
+    - $ref: "#/DengueCreateRequest"
+  discriminator:
+    propertyName: notification_type_slug
+    mapping:
+      dengue: "#/DengueCreateRequest"
+
+PolymorphicNotificationResponse:
+  description: Resposta dinâmica retornada após a criação da notificação.
+  oneOf:
+    - $ref: "#/DengueNotificationResponse"
+  discriminator:
+    propertyName: notification_type_slug
+    mapping:
+      dengue: "#/DengueNotificationResponse"
 
 # --- NOTIFICATION RESPONSE SCHEMA ---
 NotificationResponse:
@@ -233,25 +252,20 @@ DengueSpecificFields:
   properties:
     st_fever:
       type: boolean
-      description: Presença de febre.
       example: true
     st_arthralgia_intense:
       type: boolean
-      description: Dor articular intensa (característico de Chikungunya).
       example: true
     st_result_chik_s1:
       type: string
-      description: Resultado da sorologia para Chikungunya.
       enum: [nao_realizado, reagente, nao_reagente, inconclusivo]
       example: "nao_realizado"
     st_result_ns1:
       type: string
-      description: Resultado do antígeno NS1 para Dengue.
       enum: [nao_realizado, reagente, nao_reagente]
       example: "reagente"
     tp_classification:
       type: string
-      description: Classificação final do caso.
       enum:
         [
           dengue_classica,
@@ -262,15 +276,58 @@ DengueSpecificFields:
       example: "dengue_com_sinais_de_alarme"
     st_shock:
       type: boolean
-      description: Presença de choque.
       example: false
 
 DengueCreateRequest:
   allOf:
     - $ref: "#/NotificationBase"
-    - $ref: "#/DengueSpecificFields"
+    - type: object
+      required:
+        - notification_type_slug
+        - specific_fields
+      properties:
+        notification_type_slug:
+          type: string
+          enum: ["dengue"]
+          description: Identificador do agravo.
+          example: "dengue"
+        specific_fields:
+          $ref: "#/DengueSpecificFields"
+  example:
+    patient_id: 55
+    unit_id: 12
+    notification_type_slug: "dengue"
+    notification_date: "2026-06-25"
+    occurrence_date: "2026-06-20"
+    notes: "Paciente internado."
+    specific_fields:
+      st_fever: true
+      st_arthralgia_intense: true
+      st_result_chik_s1: "nao_realizado"
+      st_result_ns1: "reagente"
+      tp_classification: "dengue_com_sinais_de_alarme"
+      st_shock: false
 
 DengueNotificationResponse:
   allOf:
     - $ref: "#/NotificationResponse"
-    - $ref: "#/DengueSpecificFields"
+    - type: object
+      properties:
+        specific_fields:
+          $ref: "#/DengueSpecificFields"
+  example:
+    id: 1042
+    status: "confirmado"
+    patient_id: 55
+    unit_id: 12
+    notification_type_slug: "dengue"
+    notification_date: "2026-06-25"
+    occurrence_date: "2026-06-20"
+    notes: "Paciente internado."
+    specific_fields:
+      st_fever: true
+      st_arthralgia_intense: true
+      st_result_chik_s1: "nao_realizado"
+      st_result_ns1: "reagente"
+      tp_classification: "dengue_com_sinais_de_alarme"
+      st_shock: false
