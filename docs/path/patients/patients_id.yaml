@@ -1,3 +1,5 @@
+# ENDPOINT: /patients/{id}
+
 # --- SHARED PARAMETERS ---
 parameters:
   - name: id

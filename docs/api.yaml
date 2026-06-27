@@ -1,3 +1,10 @@
+# =======================================================
+# SISTEMA DE INFORMAÇÃO DE AGRAVOS DE NOTIFICAÇÃO (SINAN)
+# =======================================================
+#
+# A Documentação está disponível para ser acessada no ENDPOINT /api/docs
+#
+
 openapi: 3.0.0
 security:
   - bearerAuth: []
@@ -5,6 +12,9 @@ info:
   title: SINAN API - Sistema de Informação de Agravos de Notificação API
   version: 1.0.0
   description: API para integração com o Sistema de Informação de Agravos de Notificação (SINAN).
+  contact:
+    name: Lucas Marchesan da Silva - Responsável pelo Design e Arquitetura da API
+    email: lucas.marchesan@acad.ufsm.br
   license:
     name: "Uso Restrito - Ministério da Saúde"
     url: "https://www.gov.br/saude/pt-br"

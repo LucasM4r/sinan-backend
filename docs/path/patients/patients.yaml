@@ -1,3 +1,5 @@
+# ENDPOINT: /patients
+
 get:
   summary: Listar pacientes
   description: Retorna uma lista paginada com todos os pacientes cadastrados no sistema.
