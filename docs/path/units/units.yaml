@@ -3,25 +3,28 @@
 # --- GET METHOD ---
 get:
   summary: Listar unidades de saúde
-  description: Retorna uma lista com todas as unidades cadastradas no sistema.
+  description: Retorna uma lista paginada com todas as unidades cadastradas no sistema.
   operationId: listarUnidades
   tags:
     - Unidades
-  security: []
+  parameters:
+    - $ref: "../components/parameters.yaml#/PageParam"
+    - $ref: "../components/parameters.yaml#/PageSizeParam"
+    - $ref: "../components/parameters.yaml#/SearchParam"
   responses:
+    # --- SUCCESS RESPONSE ---
     "200":
       description: Lista de unidades recuperada com sucesso.
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id: { type: integer, example: 12 }
-                name: { type: string, example: "UPA 24h - Centro" }
-    "404":
-      description: Nenhuma unidade encontrada.
+            $ref: "../components/schemas.yaml#/PaginatedUnitList"
+    # --- UNAUTHORIZED ACCESS RESPONSE ---
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- INTERNAL SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
 
 # --- POST METHOD ---
 post:
@@ -30,19 +33,26 @@ post:
   operationId: criarUnidade
   tags:
     - Unidades
-  security: []
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - name
-          properties:
-            name: { type: string, example: "Posto de Saúde Vila Nova" }
+          $ref: "../components/schemas.yaml#/UnitCreateRequest"
   responses:
+    # --- CREATED RESPONSE ---
     "201":
       description: Unidade criada com sucesso.
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas.yaml#/UnitResponse"
+    # --- BAD REQUEST RESPONSE ---
     "400":
-      description: Erro de validação nos dados enviados.
+      $ref: "../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED ACCESS RESPONSE ---
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- INTERNAL SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"

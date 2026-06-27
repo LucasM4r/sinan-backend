@@ -1,8 +1,20 @@
+# =======================================================
+# SISTEMA DE INFORMAÇÃO DE AGRAVOS DE NOTIFICAÇÃO (SINAN)
+# =======================================================
+#
+# A Documentação está disponível para ser acessada no ENDPOINT /api/docs
+#
+
 openapi: 3.0.0
+security:
+  - bearerAuth: []
 info:
   title: SINAN API - Sistema de Informação de Agravos de Notificação API
   version: 1.0.0
   description: API para integração com o Sistema de Informação de Agravos de Notificação (SINAN).
+  contact:
+    name: Lucas Marchesan da Silva - Responsável pelo Design e Arquitetura da API
+    email: lucas.marchesan@acad.ufsm.br
   license:
     name: "Uso Restrito - Ministério da Saúde"
     url: "https://www.gov.br/saude/pt-br"
@@ -20,7 +32,9 @@ servers:
 paths:
   # --- AUTHENTICATION ENDPOINTS ---
   /api/v1/auth/login:
-    $ref: path/auth.yaml
+    $ref: path/auth/login.yaml
+  /api/v1/auth/logout:
+    $ref: path/auth/logout.yaml
 
   # --- UNITS ENDPOINTS ---
   /api/v1/units:
@@ -37,11 +51,12 @@ paths:
   # --- NOTIFICATIONS ENDPOINTS ---
   /api/v1/notifications:
     $ref: path/notifications/notifications.yaml
+  /api/v1/notifications/{id}:
+    $ref: path/notifications/notifications_id.yaml
 
-  # --- DENGUE NOTIFICATIONS ENDPOINTS ---
-  /api/v1/notifications/dengue:
-    $ref: path/notifications/dengue/dengue.yaml
-  /api/v1/notifications/dengue/{id}:
-    $ref: path/notifications/dengue/dengue_id.yaml
-
-  # --- BOTULISM NOTIFICATIONS ENDPOINTS ---
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

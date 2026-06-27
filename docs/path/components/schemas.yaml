@@ -1,146 +1,333 @@
-components:
-  parameters:
-    # --- PAGINATION PARAMETERS ---
-    PageParam:
-      name: page
-      in: query
-      required: false
-      schema:
-        type: integer
-      example: 1
-    PageSizeParam:
-      name: page_size
-      in: query
-      required: false
-      schema:
-        type: integer
-      example: 10
-    # --- DATE RANGE PARAMETERS ---
-    StartDateParam:
-      name: start_date
-      in: query
-      required: false
-      description: Data inicial para filtrar (formato YYYY-MM-DD).
-      schema:
-        type: string
-        format: date
-      example: "2024-01-01"
-    EndDateParam:
-      name: end_date
-      in: query
-      required: false
-      description: Data final para filtrar (formato YYYY-MM-DD).
-      schema:
-        type: string
-        format: date
-      example: "2024-12-31"
-    # --- SEARCH PARAMETERS ---
-    SearchParam:
-      name: search
-      in: query
-      required: false
-      description: Busca por nome do paciente, CPF ou termos específicos da notificação.
-      schema:
-        type: string
-      example: "Joao"
-    # --- ID FILTER PARAMETERS ---
-    DiseaseIDParam:
-      name: disease_id
-      in: query
-      required: false
-      description: Filtra por ID da doença.
-      schema:
-        type: integer
-      example: 5
-    PatientIDParam:
-      name: patient_id
-      in: query
-      required: false
-      description: Filtra por ID do paciente.
-      schema:
-        type: integer
-      example: 42
-    UnitIDParam:
-      name: unit_id
-      in: query
-      required: false
-      description: Filtra por ID da unidade de saúde.
-      schema:
-        type: integer
-      example: 12
-  schemas:
-    # --- ERROR RESPONSE SCHEMA ---
-    ErrorResponse:
-      type: object
-      required:
-        - type
-        - detail
-      properties:
-        type:
-          type: string
-          description: Código padronizado do erro para o frontend tratar programaticamente.
-          example: "invalid_request"
-        detail:
-          type: string
-          description: Mensagem legível por humanos explicando o que aconteceu.
-          example: "Um ou mais parâmetros da requisição são inválidos."
-        invalid_params:
-          type: array
-          description: Lista com os campos específicos que geraram o erro (opcional).
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Nome do campo ou parâmetro com erro.
-                example: "start_date"
-              reason:
-                type: string
-                description: O motivo da falha naquele campo.
-                example: "O formato de data deve ser YYYY-MM-DD."
+# --- ERROR RESPONSE SCHEMA ---
+ErrorResponse:
+  type: object
+  required:
+    - type
+    - detail
+  properties:
+    type:
+      type: string
+      description: Código padronizado do erro para o frontend tratar programaticamente.
+      example: "invalid_request"
+    detail:
+      type: string
+      description: Mensagem legível por humanos explicando o que aconteceu.
+      example: "Um ou mais parâmetros da requisição são inválidos."
+    invalid_params:
+      type: array
+      description: Lista com os campos específicos que geraram o erro (opcional).
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Nome do campo ou parâmetro com erro.
+            example: "start_date"
+          reason:
+            type: string
+            description: O motivo da falha naquele campo.
+            example: "O formato de data deve ser YYYY-MM-DD."
 
-    # --- PATIENT SCHEMA ---
-    PatientResponse:
-      type: object
+# --- PATIENT SCHEMA ---
+PatientResponse:
+  type: object
+  required:
+    - id
+    - name
+    - cpf
+  properties:
+    id:
+      type: integer
+      description: ID único do paciente.
+      example: 105
+    name:
+      type: string
+      description: Nome completo do paciente.
+      example: "João da Silva"
+    cpf:
+      type: string
+      description: CPF do paciente (apenas números).
+      example: "12345678900"
+      pattern: "^[0-9]{11}$"
+    created_at:
+      type: string
+      format: date-time
+      description: Data e hora do cadastro no sistema.
+      example: "2026-06-25T22:30:00Z"
+    updated_at:
+      type: string
+      format: date-time
+      description: Data e hora da última atualização.
+      example: "2026-06-25T22:30:00Z"
+
+PatientCreateRequest:
+  type: object
+  required:
+    - name
+    - cpf
+  properties:
+    name:
+      type: string
+      description: Nome completo do paciente para cadastro.
+      example: "Maria Oliveira"
+    cpf:
+      type: string
+      description: CPF válido (apenas números).
+      example: "09876543211"
+      pattern: "^[0-9]{11}$"
+
+PatientUpdateRequest:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: Nome completo do paciente para atualização.
+      example: "João da Silva Souza"
+    cpf:
+      type: string
+      description: CPF do paciente (caso seja permitida a alteração ou validação).
+      example: "12345678900"
+
+# --- AUTH SCHEMA ---
+LoginRequest:
+  type: object
+  required:
+    - email
+    - password
+  properties:
+    email:
+      type: string
+      format: email
+      description: E-mail do usuário.
+      example: "usuario@sinan.gov.br"
+    password:
+      type: string
+      format: password
+      description: Senha do usuário.
+
+# --- UNITS SCHEMA ---
+# --- UNIT SCHEMAS ---
+
+UnitBase:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: Nome oficial da unidade de saúde.
+      example: "UPA 24h - Centro"
+
+UnitResponse:
+  allOf:
+    - $ref: "#/UnitBase"
+    - type: object
       properties:
         id:
           type: integer
-          description: ID único do paciente gerado pelo banco de dados.
-          example: 105
-        name:
-          type: string
-          description: Nome completo do paciente.
-          example: "João da Silva"
-        cpf:
-          type: string
-          description: CPF do paciente (apenas números).
-          example: "12345678900"
+          description: ID único da unidade (gerado pelo banco).
+          example: 12
 
-    PatientCreateRequest:
-      type: object
-      required:
-        - name
-        - cpf
-      properties:
-        name:
-          type: string
-          description: Nome completo do paciente para cadastro.
-          example: "Maria Oliveira"
-        cpf:
-          type: string
-          description: CPF válido (apenas números).
-          example: "09876543211"
+UnitCreateRequest:
+  allOf:
+    - $ref: "#/UnitBase"
 
-    PatientUpdateRequest:
-      type: object
-      required:
-        - name
+PaginatedUnitList:
+  type: object
+  properties:
+    count:
+      type: integer
+      description: Total de unidades cadastradas.
+      example: 45230
+    next:
+      type: string
+      nullable: true
+      example: "http://localhost:8000/api/v1/units/?page=2"
+    previous:
+      type: string
+      nullable: true
+      example: null
+    results:
+      type: array
+      items:
+        $ref: "#/UnitResponse"
+
+# --- NOTIFICATION BASE SCHEMA ---
+NotificationBase:
+  type: object
+  required:
+    - patient_id
+    - unit_id
+    - notification_date
+    - occurrence_date
+    - notification_type_slug
+  properties:
+    patient_id:
+      type: integer
+      description: ID do paciente.
+      example: 55
+    unit_id:
+      type: integer
+      description: ID da unidade de saúde.
+      example: 12
+    notification_type_slug:
+      type: string
+      description: Identificador do agravo.
+      example: "dengue"
+    notification_date:
+      type: string
+      format: date
+      description: Data da notificação.
+      example: "2026-06-25"
+    occurrence_date:
+      type: string
+      format: date
+      description: Data da ocorrência.
+      example: "2026-06-20"
+    notes:
+      type: string
+      description: Observações adicionais sobre a notificação.
+      example: "Paciente internado."
+
+CreateNotificationRequest:
+  description: Requisição para criar uma nova notificação.
+  oneOf:
+    - $ref: "#/DengueCreateRequest"
+  discriminator:
+    propertyName: notification_type_slug
+    mapping:
+      dengue: "#/DengueCreateRequest"
+
+PolymorphicNotificationResponse:
+  description: Resposta dinâmica retornada após a criação da notificação.
+  oneOf:
+    - $ref: "#/DengueNotificationResponse"
+  discriminator:
+    propertyName: notification_type_slug
+    mapping:
+      dengue: "#/DengueNotificationResponse"
+
+# --- NOTIFICATION RESPONSE SCHEMA ---
+NotificationResponse:
+  allOf:
+    - $ref: "#/NotificationBase"
+    - type: object
       properties:
-        name:
+        id:
+          type: integer
+          description: ID único da notificação (gerado pelo sistema).
+          example: 1042
+        status:
           type: string
-          description: Nome completo do paciente para atualização.
-          example: "João da Silva Souza"
-        cpf:
+          description: Status atual da notificação.
+          example: "confirmado"
+
+PaginatedNotificationList:
+  type: object
+  properties:
+    count:
+      type: integer
+      description: Total geral de notificações no banco.
+      example: 1530
+    next:
+      type: string
+      nullable: true
+      description: URL para a próxima página.
+      example: "http://localhost:8000/api/v1/notificacoes/?page=2"
+    previous:
+      type: string
+      nullable: true
+      description: URL para a página anterior.
+      example: null
+    results:
+      type: array
+      items:
+        $ref: "#/NotificationResponse"
+
+# --- DENGUE NOTIFICATION SCHEMAS ---
+DengueSpecificFields:
+  type: object
+  properties:
+    st_fever:
+      type: boolean
+      example: true
+    st_arthralgia_intense:
+      type: boolean
+      example: true
+    st_result_chik_s1:
+      type: string
+      enum: [nao_realizado, reagente, nao_reagente, inconclusivo]
+      example: "nao_realizado"
+    st_result_ns1:
+      type: string
+      enum: [nao_realizado, reagente, nao_reagente]
+      example: "reagente"
+    tp_classification:
+      type: string
+      enum:
+        [
+          dengue_classica,
+          dengue_com_sinais_de_alarme,
+          dengue_grave,
+          chikungunya,
+        ]
+      example: "dengue_com_sinais_de_alarme"
+    st_shock:
+      type: boolean
+      example: false
+
+DengueCreateRequest:
+  allOf:
+    - $ref: "#/NotificationBase"
+    - type: object
+      required:
+        - notification_type_slug
+        - specific_fields
+      properties:
+        notification_type_slug:
           type: string
-          description: CPF do paciente (caso seja permitida a alteração ou validação).
-          example: "12345678900"
+          enum: ["dengue"]
+          description: Identificador do agravo.
+          example: "dengue"
+        specific_fields:
+          $ref: "#/DengueSpecificFields"
+  example:
+    patient_id: 55
+    unit_id: 12
+    notification_type_slug: "dengue"
+    notification_date: "2026-06-25"
+    occurrence_date: "2026-06-20"
+    notes: "Paciente internado."
+    specific_fields:
+      st_fever: true
+      st_arthralgia_intense: true
+      st_result_chik_s1: "nao_realizado"
+      st_result_ns1: "reagente"
+      tp_classification: "dengue_com_sinais_de_alarme"
+      st_shock: false
+
+DengueNotificationResponse:
+  allOf:
+    - $ref: "#/NotificationResponse"
+    - type: object
+      properties:
+        specific_fields:
+          $ref: "#/DengueSpecificFields"
+  example:
+    id: 1042
+    status: "confirmado"
+    patient_id: 55
+    unit_id: 12
+    notification_type_slug: "dengue"
+    notification_date: "2026-06-25"
+    occurrence_date: "2026-06-20"
+    notes: "Paciente internado."
+    specific_fields:
+      st_fever: true
+      st_arthralgia_intense: true
+      st_result_chik_s1: "nao_realizado"
+      st_result_ns1: "reagente"
+      tp_classification: "dengue_com_sinais_de_alarme"
+      st_shock: false

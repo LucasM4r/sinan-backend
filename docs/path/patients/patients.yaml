@@ -1,11 +1,11 @@
-# --- GET METHOD ---
+# ENDPOINT: /patients
+
 get:
   summary: Listar pacientes
   description: Retorna uma lista paginada com todos os pacientes cadastrados no sistema.
   operationId: listarPacientes
   tags:
     - Pacientes
-  security: []
   responses:
     "200":
       description: Lista de pacientes recuperada com sucesso.
@@ -31,38 +31,30 @@ get:
               results:
                 type: array
                 items:
-                  $ref: "../components/schemas.yaml#/components/schemas/PatientResponse"
-    "404":
-      description: Nenhum paciente encontrado.
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+                  $ref: "../components/schemas.yaml#/PatientResponse"
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"
 
-# --- POST METHOD ---
 post:
   summary: Cadastrar novo paciente
   description: Registra um novo paciente no banco de dados.
   operationId: criarPaciente
   tags:
     - Pacientes
-  security: []
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: "../components/schemas.yaml#/components/schemas/PatientCreateRequest"
+          $ref: "../components/schemas.yaml#/PatientCreateRequest"
   responses:
     "201":
       description: Paciente criado com sucesso.
       content:
         application/json:
           schema:
-            $ref: "../components/schemas.yaml#/components/schemas/PatientResponse"
+            $ref: "../components/schemas.yaml#/PatientResponse"
     "400":
-      description: "Erro de validação nos dados enviados (ex: CPF já cadastrado ou inválido)."
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas.yaml#/components/schemas/ErrorResponse"
+      $ref: "../components/errors.yaml#/responses/400"
+    "401":
+      $ref: "../components/errors.yaml#/responses/401"

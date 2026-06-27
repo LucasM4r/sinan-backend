@@ -13,19 +13,9 @@ post:
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            email:
-              type: string
-              format: email
-              example: "admin@sinan.gov.br"
-              description: Endereço de e-mail do usuário.
-            password:
-              type: string
-              format: password
-              example: "2026sinan"
-              description: Senha do usuário.
+          $ref: "../components/schemas.yaml#/LoginRequest"
   responses:
+    # --- SUCCESS RESPONSE ---
     "200":
       description: Autenticação bem-sucedida. Retorna um token de acesso.
       content:
@@ -37,5 +27,18 @@ post:
                 type: string
                 description: Token de acesso JWT.
                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    # --- BAD REQUEST ERROR RESPONSE ---
+    "400":
+      $ref: "../components/errors.yaml#/responses/400"
+    # --- UNAUTHORIZED ERROR RESPONSE ---
     "401":
-      description: Credenciais inválidas. O usuário não pôde ser autenticado.
+      $ref: "../components/errors.yaml#/responses/401"
+    # --- FORBIDDEN ERROR RESPONSE ---
+    "403":
+      $ref: "../components/errors.yaml#/responses/403"
+    # --- UNPROCESSABLE ENTITY ERROR RESPONSE ---
+    "422":
+      $ref: "../components/errors.yaml#/responses/422"
+    # --- SERVER ERROR RESPONSE ---
+    "500":
+      $ref: "../components/errors.yaml#/responses/500"
