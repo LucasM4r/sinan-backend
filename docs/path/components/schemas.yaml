@@ -1,33 +1,3 @@
-# --- ERROR RESPONSE SCHEMA ---
-ErrorResponse:
-  type: object
-  required:
-    - type
-    - detail
-  properties:
-    type:
-      type: string
-      description: Código padronizado do erro para o frontend tratar programaticamente.
-      example: "invalid_request"
-    detail:
-      type: string
-      description: Mensagem legível por humanos explicando o que aconteceu.
-      example: "Um ou mais parâmetros da requisição são inválidos."
-    invalid_params:
-      type: array
-      description: Lista com os campos específicos que geraram o erro (opcional).
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-            description: Nome do campo ou parâmetro com erro.
-            example: "start_date"
-          reason:
-            type: string
-            description: O motivo da falha naquele campo.
-            example: "O formato de data deve ser YYYY-MM-DD."
-
 # --- PATIENT SCHEMA ---
 PatientResponse:
   type: object
@@ -90,26 +60,7 @@ PatientUpdateRequest:
       description: CPF do paciente (caso seja permitida a alteração ou validação).
       example: "12345678900"
 
-# --- AUTH SCHEMA ---
-LoginRequest:
-  type: object
-  required:
-    - email
-    - password
-  properties:
-    email:
-      type: string
-      format: email
-      description: E-mail do usuário.
-      example: "usuario@sinan.gov.br"
-    password:
-      type: string
-      format: password
-      description: Senha do usuário.
-
 # --- UNITS SCHEMA ---
-# --- UNIT SCHEMAS ---
-
 UnitBase:
   type: object
   required:

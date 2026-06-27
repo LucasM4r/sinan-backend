@@ -4,11 +4,16 @@ post:
   tags:
     - Autenticação
   operationId: logoutUsuario
+  requestBody:
+    $ref: "../components/auth.yaml#/LogoutRequest"
 
   responses:
     # --- SUCCESS WITHOUT CONTENT RESPONSE ---
     "204":
-      description: Logout realizado com sucesso (sem conteúdo).
+      $ref: "../components/auth.yaml#/LogoutResponse"
+    # --- BAD REQUEST ERROR RESPONSE ---
+    "400":
+      $ref: "../components/errors.yaml#/responses/400"
     # --- UNAUTHORIZED ERROR RESPONSE ---
     "401":
       $ref: "../components/errors.yaml#/responses/401"

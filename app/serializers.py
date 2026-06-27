@@ -13,13 +13,18 @@ Módulo de Serialização (API Integration)
 '''
 
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import *
+
+# Serializadores para Autenticação
+class LoginSerializer(TokenObtainPairSerializer):
+    pass
 
 class UnidadeSerializer(serializers.ModelSerializer): # Serializa modelo de Unidades
     class Meta:
         model = Unidade
         fields = '__all__'
-class UsuarioSerilizer(serializers.ModelSerializer): # Serializa modelo de Usuários (typo mantido)
+class UsuarioSerializer(serializers.ModelSerializer): # Serializa modelo de Usuários (typo mantido)
     class Meta:
         model = Usuario
         fields = '__all__'
