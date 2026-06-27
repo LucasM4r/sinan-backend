@@ -25,7 +25,9 @@ router.register(r'notificacoes-chikungunya', NotificacaoChikungunyaViewSet)
 router.register(r'notificacoes-coqueluche', NotificacaoCoquelucheViewSet)
 
 urlpatterns = [
+    path(r'api/v1/auth/login', LoginView.as_view(), name='login'),
+
     path('health/', healthcheck, name='healthcheck'),
-    path('', include(router.urls)),  # Inclui automaticamente todos os endpoints do CRUD
+    path('api/v1/', include(router.urls)),
 ]
 

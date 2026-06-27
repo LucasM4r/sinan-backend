@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -30,6 +31,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-dev-key-change-me')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() == 'true'
 
+AUTH_USER_MODEL = 'app.Usuario'
+
 ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if host.strip()]
 
 # Application definition
@@ -42,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
     'app.app.AppConfig',
 ]
@@ -139,25 +144,40 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # WARNING: This is a development setting.
 # In production, you should configure CORS properly to allow only trusted origins.
 CORS_ALLOWED_ORIGINS = [
-    origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', 
-                                           'http://localhost:3000, ' \
-                                           'http://127.0.0.1:3000')
-                                           .split(',') if origin.strip()
+    origin.strip() for origin in os.getenv(
+        'CORS_ALLOWED_ORIGINS', 
+        'http://localhost:3000,'
+        'http://127.0.0.1:3000,'
+        'http://localhost:8000,'
+        'http://127.0.0.1:8000'
+    ).split(',') if origin.strip()
 ]
-
 CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+    
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 }
 
 SPECTACULAR_SETTINGS = {
@@ -165,4 +185,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Documentação oficial da API...',
     'VERSION': '1.0.0',
     'SCHEMA_PATH': BASE_DIR / 'docs' / 'api.yaml', 
+    'SERVERS': [
+        {'url': 'http://localhost:8000', 'description': 'Ambiente Local de Desenvolvimento'},
+    ],
 }

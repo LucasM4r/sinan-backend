@@ -1,6 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import extend_schema, OpenApiExample
 from .models import *
 from .serializers import *
 
@@ -10,6 +14,27 @@ def healthcheck(request):
     Rota simples para verificar se a API está online.
     """
     return Response({"status": "ok", "mensagem": "A API está a funcionar perfeitamente!"})
+
+# Views de Autenticação
+class LoginView(TokenObtainPairView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        """
+        Endpoint para autenticação de usuários.
+        Retorna tokens JWT (access e refresh) se as credenciais forem válidas.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        token = serializer.validated_data.get('access')
+
+        return Response(
+            {
+                'access_token': token,
+            },
+            status=status.HTTP_200_OK
+        )
 
 # ViewSets  Principais
 
