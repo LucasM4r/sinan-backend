@@ -11,6 +11,9 @@ post:
     # --- SUCCESS WITHOUT CONTENT RESPONSE ---
     "204":
       $ref: "../components/auth.yaml#/LogoutResponse"
+    # --- BAD REQUEST ERROR RESPONSE ---
+    "400":
+      $ref: "../components/errors.yaml#/responses/400"
     # --- UNAUTHORIZED ERROR RESPONSE ---
     "401":
       $ref: "../components/errors.yaml#/responses/401"
