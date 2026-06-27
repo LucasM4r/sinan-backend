@@ -1,0 +1,54 @@
+# --- AUTH SCHEMA ---
+LoginRequest:
+  description: Credenciais de login do usuário.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            description: E-mail do usuário.
+            example: "usuario@sinan.gov.br"
+          password:
+            type: string
+            format: password
+            description: Senha do usuário.
+
+LogoutRequest:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - refresh
+        properties:
+          refresh:
+            type: string
+            description: Token de atualização (refresh token) do usuário.
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+LoginResponse:
+  description: Autenticação bem-sucedida. Retorna um token de acesso.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          access:
+            type: string
+            description: Token de acesso JWT.
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          refresh:
+            type: string
+            description: Token de atualização (refresh token) do usuário.
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+LogoutResponse:
+  description: Logout realizado com sucesso (sem conteúdo).

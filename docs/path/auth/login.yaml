@@ -8,25 +8,11 @@ post:
   operationId: loginUsuario
   security: []
   requestBody:
-    description: Credenciais de login do usuário.
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: "../components/schemas.yaml#/LoginRequest"
+    $ref: "../components/auth.yaml#/LoginRequest"
   responses:
     # --- SUCCESS RESPONSE ---
     "200":
-      description: Autenticação bem-sucedida. Retorna um token de acesso.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              access_token:
-                type: string
-                description: Token de acesso JWT.
-                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      $ref: "../components/auth.yaml#/LoginResponse"
     # --- BAD REQUEST ERROR RESPONSE ---
     "400":
       $ref: "../components/errors.yaml#/responses/400"
