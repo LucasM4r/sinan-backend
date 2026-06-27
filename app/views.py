@@ -1,5 +1,9 @@
+from tokenize import TokenError
+import uuid
+
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -31,20 +35,63 @@ class LoginView(TokenObtainPairView):
 
         return Response(
             {
-                'access_token': token,
+                'access': token,
+                'refresh': serializer.validated_data.get('refresh')
             },
             status=status.HTTP_200_OK
         )
 
-# ViewSets  Principais
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request):
+        """
+        Endpoint para logout de usuários.
+        Invalida o token de refresh fornecido.
+        """
+        try:
+            refresh_token = request.data.get("refresh")
+            
+            if not refresh_token:
+                return Response(
+                    {
+                        "type": "validation_error",
+                        "detail": "O campo 'refresh' é obrigatório.",
+                        "code": "missing_field"
+                    }, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except TokenError as e:
+            return Response(
+                {
+                    "type": "token_error",
+                    "detail": f"Erro ao invalidar o token: {str(e)}",
+                    "code": "token_error"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {
+                    "type": "server_error",
+                    "detail": f"Erro interno ao processar o logout: {str(e)}",
+                    "request_id": str(uuid.uuid4())
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+# ViewSets  Principais
 class UnidadeViewSet(viewsets.ModelViewSet):
     queryset = Unidade.objects.all()
     serializer_class = UnidadeSerializer
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerilizer
+    serializer_class = UsuarioSerializer
 
 class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all()

@@ -4,8 +4,11 @@
 .DS_Store
 .idea/
 .vscode/
+.venv/
 venv
 
 # --- PYTHON ---
-__pycache__/
 *.pyc
+*.pyo
+*.pyd
+__pycache__/

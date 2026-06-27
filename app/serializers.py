@@ -24,7 +24,7 @@ class UnidadeSerializer(serializers.ModelSerializer): # Serializa modelo de Unid
     class Meta:
         model = Unidade
         fields = '__all__'
-class UsuarioSerilizer(serializers.ModelSerializer): # Serializa modelo de Usuários (typo mantido)
+class UsuarioSerializer(serializers.ModelSerializer): # Serializa modelo de Usuários (typo mantido)
     class Meta:
         model = Usuario
         fields = '__all__'
